@@ -37,6 +37,7 @@ export const Form = styled.View`
 
 export const Emoji = styled.Text`
   font-size: 44px;
+  margin-bottom: 20px;
 `;
 
 export const Title = styled.Text`
