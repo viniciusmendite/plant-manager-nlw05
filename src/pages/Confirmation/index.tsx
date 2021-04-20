@@ -20,7 +20,7 @@ export function Confirmation() {
           plantinhas com muito cuidado
         </Description>
       <Footer>
-        <Button />
+        <Button title="Começar" />
       </Footer>
       </Content>
 
