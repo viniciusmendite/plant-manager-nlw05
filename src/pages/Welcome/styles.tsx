@@ -22,7 +22,7 @@ export const Title = styled.Text`
 `;
 
 export const Image = styled.Image`
-  height: ${Dimensions.get('window').width * 0.7};
+  height: ${Dimensions.get('window').width * 0.7}px;
 `;
 
 export const Description = styled.Text`
