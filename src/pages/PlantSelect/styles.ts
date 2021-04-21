@@ -1,6 +1,8 @@
+import { FlatList } from 'react-native'
 import styled from 'styled-components/native';
 import colors from '../../styles/colors';
 import fonts from '../../styles/fonts';
+import { EnviromentProps as IEnviromentProps } from './index';
 
 export const Container = styled.SafeAreaView`
   flex: 1;
@@ -28,7 +30,7 @@ export const Subtitle = styled.Text`
 
 export const FlatListContainer = styled.View``;
 
-export const ListItem = styled.FlatList.attrs({
+export const ListItem = styled(FlatList as new () => FlatList<IEnviromentProps>).attrs({
   contentContainerStyle: {
     height: 40,
     justifyContent: 'center',
