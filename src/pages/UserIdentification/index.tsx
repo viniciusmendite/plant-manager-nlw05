@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Keyboard, Platform, TouchableWithoutFeedback } from 'react-native';
+import { Keyboard, Platform, TouchableWithoutFeedback, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { Button } from '../../components/Button';
 
@@ -29,7 +30,12 @@ export function UserIdentification() {
     setIsFocused(true);
   }
 
-  function handleSubmit() {
+  async function handleSubmit() {
+    if (!name)
+      return Alert.alert('Ops...', 'Me diz como chamar você 😢');
+
+    await AsyncStorage.setItem('@plantmanager:user', name);
+
     navigate('Confirmation')
   }
 
@@ -51,7 +57,7 @@ export function UserIdentification() {
                 onFocus={handleInputFocus}
                 isFocused={isFocused}
                 isFilled={!!name}
-                onChangeText={setName}
+                onChangeText={text => setName(text)}
               />
               <Footer>
                 <Button onPress={handleSubmit} title="Confirmar" />
