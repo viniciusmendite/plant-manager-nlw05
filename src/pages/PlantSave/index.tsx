@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
+import DateTimePicker, { Event } from '@react-native-community/datetimepicker';
 import { useRoute } from '@react-navigation/native';
 import { SvgFromUri } from "react-native-svg";
+import { isBefore, format } from 'date-fns';
 
 import {
   Container,
@@ -12,10 +14,13 @@ import {
   Image,
   TipText,
   AlertLabel,
+  DateTimePickerButton,
+  DateTimePickerText
 } from './styles';
 
 import waterDrop from '../../assets/waterdrop.png';
 import { Button } from '../../components/Button';
+import { Platform, Alert } from 'react-native';
 
 interface Params {
   plant: {
@@ -33,8 +38,29 @@ interface Params {
 }
 
 export function PlantSave() {
+  const [selectedDateTime, setSelectedDateTime] = useState(new Date());
+  const [showDatePicker, setShowDatePicker] = useState(Platform.OS === 'ios');
+
   const route = useRoute();
   const { plant } = route.params as Params;
+
+  function handleChangeTime(event: Event, dateTime: Date | undefined) {
+    if (Platform.OS === 'android') {
+      setShowDatePicker(oldState => !oldState);
+    }
+
+    if (dateTime && isBefore(dateTime, new Date())) {
+      setSelectedDateTime(new Date());
+      return Alert.alert('Escolha uma hora no futuro! ⏰')
+    }
+
+    if (dateTime)
+      setSelectedDateTime(dateTime)
+  }
+
+  function handleOpenDateTimePickerForAndroid() {
+    setShowDatePicker(oldState => !oldState);
+  }
 
   return (
     <Container>
@@ -64,6 +90,26 @@ export function PlantSave() {
         <AlertLabel>
           Escolha o melhor horário para ser lembrado:
         </AlertLabel>
+
+        {showDatePicker && (
+          <DateTimePicker
+            value={selectedDateTime}
+            mode="time"
+            display="spinner"
+            onChange={handleChangeTime}
+          />)}
+
+        {
+          Platform.OS === 'android' && (
+            <DateTimePickerButton
+              onPress={handleOpenDateTimePickerForAndroid}
+            >
+              <DateTimePickerText>
+                {`Mudar ${format(selectedDateTime, 'HH:mm')}`}
+              </DateTimePickerText>
+            </DateTimePickerButton>
+          )
+        }
 
         <Button title="Cadastrar planta" onPress={() => { }} />
       </Controller>
