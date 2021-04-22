@@ -21,6 +21,7 @@ import {
 import waterDrop from '../../assets/waterdrop.png';
 import { Button } from '../../components/Button';
 import { Platform, Alert } from 'react-native';
+import { loadPlant, savePlant } from '../../libs/storage';
 
 interface Params {
   plant: {
@@ -60,6 +61,18 @@ export function PlantSave() {
 
   function handleOpenDateTimePickerForAndroid() {
     setShowDatePicker(oldState => !oldState);
+  }
+
+  async function handleSave() {
+    try {
+      await savePlant({
+        ...plant,
+        dateTimeNotification: selectedDateTime
+      });
+    } catch {
+      Alert.alert('Não foi possível salvar! 😢')
+
+    }
   }
 
   return (
@@ -111,7 +124,7 @@ export function PlantSave() {
           )
         }
 
-        <Button title="Cadastrar planta" onPress={() => { }} />
+        <Button title="Cadastrar planta" onPress={handleSave} />
       </Controller>
     </Container>
   );
