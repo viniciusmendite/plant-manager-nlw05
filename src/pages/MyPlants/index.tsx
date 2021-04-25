@@ -4,7 +4,7 @@ import { Header } from '../../components/Header';
 
 import waterDrop from '../../assets/waterdrop.png';
 
-import { loadPlant } from '../../libs/storage';
+import { loadPlant, removePlant } from '../../libs/storage';
 import { formatDistance } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
@@ -84,18 +84,10 @@ export function MyPlants() {
         text: 'Sim 😢',
         onPress: async () => {
           try {
-            const data = await AsyncStorage.getItem('@plantmanager: plants');
-            const plants = data ? (JSON.parse(data) as StoragePlantProps) : {};
-
-            delete plants[plant.id];
-
-            await AsyncStorage.setItem(
-              '@plantmanager: plants',
-              JSON.stringify(plants)
-            );
+            removePlant(plant.id);
 
             setMyPlants(oldData => {
-             return oldData.filter(item=> item.id !== plant.id);
+              return oldData.filter(item => item.id !== plant.id);
             })
           } catch (error) {
             Alert.alert('Não foi possível remover!')
