@@ -3,6 +3,13 @@ import styled from 'styled-components/native';
 import colors from '../../styles/colors';
 import fonts from '../../styles/fonts';
 
+export const ScrollView = styled.ScrollView.attrs({
+  contentContainerStyle: {
+    flex: 1,
+    justifyContent: 'center',
+  }
+})``;
+
 export const Container = styled.View`
   flex: 1;
   justify-content: space-between;

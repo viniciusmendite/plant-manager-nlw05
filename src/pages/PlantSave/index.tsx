@@ -5,6 +5,7 @@ import { SvgFromUri } from "react-native-svg";
 import { isBefore, format } from 'date-fns';
 
 import {
+  ScrollView,
   Container,
   PlantInfo,
   PlantName,
@@ -86,56 +87,60 @@ export function PlantSave() {
   }
 
   return (
-    <Container>
-      <PlantInfo>
-        <SvgFromUri
-          uri={plant.photo}
-          height={150}
-          width={150}
-        />
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+    >
+      <Container>
+        <PlantInfo>
+          <SvgFromUri
+            uri={plant.photo}
+            height={150}
+            width={150}
+          />
 
-        <PlantName>
-          {plant.name}
-        </PlantName>
-        <Description>
-          {plant.about}
-        </Description>
-      </PlantInfo>
+          <PlantName>
+            {plant.name}
+          </PlantName>
+          <Description>
+            {plant.about}
+          </Description>
+        </PlantInfo>
 
-      <Controller>
-        <TipContainer>
-          <Image source={waterDrop} />
-          <TipText>
-            {plant.water_tips}
-          </TipText>
-        </TipContainer>
+        <Controller>
+          <TipContainer>
+            <Image source={waterDrop} />
+            <TipText>
+              {plant.water_tips}
+            </TipText>
+          </TipContainer>
 
-        <AlertLabel>
-          Escolha o melhor horário para ser lembrado:
+          <AlertLabel>
+            Escolha o melhor horário para ser lembrado:
         </AlertLabel>
 
-        {showDatePicker && (
-          <DateTimePicker
-            value={selectedDateTime}
-            mode="time"
-            display="spinner"
-            onChange={handleChangeTime}
-          />)}
+          {showDatePicker && (
+            <DateTimePicker
+              value={selectedDateTime}
+              mode="time"
+              display="spinner"
+              onChange={handleChangeTime}
+            />)}
 
-        {
-          Platform.OS === 'android' && (
-            <DateTimePickerButton
-              onPress={handleOpenDateTimePickerForAndroid}
-            >
-              <DateTimePickerText>
-                {`Mudar ${format(selectedDateTime, 'HH:mm')}`}
-              </DateTimePickerText>
-            </DateTimePickerButton>
-          )
-        }
+          {
+            Platform.OS === 'android' && (
+              <DateTimePickerButton
+                onPress={handleOpenDateTimePickerForAndroid}
+              >
+                <DateTimePickerText>
+                  {`Mudar ${format(selectedDateTime, 'HH:mm')}`}
+                </DateTimePickerText>
+              </DateTimePickerButton>
+            )
+          }
 
-        <Button title="Cadastrar planta" onPress={handleSave} />
-      </Controller>
-    </Container>
+          <Button title="Cadastrar planta" onPress={handleSave} />
+        </Controller>
+      </Container>
+    </ScrollView>
   );
 }

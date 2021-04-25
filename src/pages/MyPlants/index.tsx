@@ -19,6 +19,9 @@ import {
   PlantText,
 } from './styles';
 import { PlantCardSecondary } from '../../components/PlantCardSecondary';
+import { Load } from '../../components/Load';
+import { Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export interface PlantProps {
   id: string;
@@ -31,7 +34,14 @@ export interface PlantProps {
     times: number;
     repeat_every: string;
   },
+  hour: string;
   dateTimeNotification: Date;
+}
+
+interface StoragePlantProps {
+  [id: string]: {
+    data: PlantProps;
+  }
 }
 
 export function MyPlants() {
@@ -60,6 +70,41 @@ export function MyPlants() {
     loadStorageData();
   }, [])
 
+  if (loading) {
+    return <Load />
+  }
+
+  function handleRemove(plant: PlantProps) {
+    Alert.alert('Remover', `Deseja remover a ${plant.name}?`, [
+      {
+        text: 'Não 🙏',
+        style: 'cancel'
+      },
+      {
+        text: 'Sim 😢',
+        onPress: async () => {
+          try {
+            const data = await AsyncStorage.getItem('@plantmanager: plants');
+            const plants = data ? (JSON.parse(data) as StoragePlantProps) : {};
+
+            delete plants[plant.id];
+
+            await AsyncStorage.setItem(
+              '@plantmanager: plants',
+              JSON.stringify(plants)
+            );
+
+            setMyPlants(oldData => {
+             return oldData.filter(item=> item.id !== plant.id);
+            })
+          } catch (error) {
+            Alert.alert('Não foi possível remover!')
+          }
+        }
+      }
+    ])
+  }
+
   return (
     <Container>
       <Header />
@@ -81,10 +126,9 @@ export function MyPlants() {
           data={myPlants}
           keyExtractor={(item) => String(item.id)}
           renderItem={({ item }) => (
-            <PlantCardSecondary data={item} />
+            <PlantCardSecondary data={item} handleRemove={() => handleRemove(item)} />
           )}
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ flex: 1 }}
         />
       </Plants>
     </Container>

@@ -1,7 +1,26 @@
 import { RectButton } from 'react-native-gesture-handler';
+import { Animated } from 'react-native';
 import styled from 'styled-components/native';
+
 import colors from '../../styles/colors';
 import fonts from '../../styles/fonts';
+
+export const AnimatedContainer = styled(Animated.View)``
+
+export const Content = styled.View``
+
+export const Button = styled(RectButton)`
+  width: 100px;
+  height: 85px;
+  background: ${colors.red};
+  margin-top: 15px;
+  border-radius: 20px;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  right: 10px;
+  padding-left: 15px;
+`
 
 export const Container = styled(RectButton)`
   width: 100%;
